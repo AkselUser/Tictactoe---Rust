@@ -32,15 +32,15 @@ fn main() -> ! {
             board = print_board(board, false);
 
             if _made_move {
-                if player.symbol == PlayerSymbol::Circle {
-                    player.symbol = PlayerSymbol::Cross;
-                } else {
-                    player.symbol = PlayerSymbol::Circle;
-                }
                 match board.check_if_game_is_over(&player) {
                     GameEnd::Draw => {println!("      Its a draw!"); std::process::exit(1)},
                     GameEnd::Win => {println!("      {} is the winner!", player.symbol); std::process::exit(1);},
                     GameEnd::No => {}
+                }
+                if player.symbol == PlayerSymbol::Circle {
+                    player.symbol = PlayerSymbol::Cross;
+                } else {
+                    player.symbol = PlayerSymbol::Circle;
                 }
             }
         };

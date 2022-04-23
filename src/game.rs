@@ -60,33 +60,29 @@ impl Board {
             }
         }
         if draw { return GameEnd::Draw; }
-        Board::check_winning_conditions(&self.tiles, player);
-
-        let mut transpose : TileArray = [[None; 3]; 3];
-        for i in 0..self.tiles.len() {
-            for j in 0..self.tiles[i].len() {
-                transpose[j][i] = self.tiles[i][j]
-            }
+        if Board::check_winning_conditions(&self.tiles, player) {
+            return GameEnd::Win;
         }
-        Board::check_winning_conditions(&transpose, player);
+
         GameEnd::No
     }
 
     fn check_winning_conditions(board: &TileArray, player: &Players) ->  bool {
-        let mut check_hor = true;
-        let mut check_diag = true;
-
+        let mut is_win = false;
+        let mut transpose : TileArray = [[None; 3]; 3];
+        println!("{}", player.symbol);
         for i in 0..board.len() {
-            check_hor = true;
             for j in 0..board[i].len() {
-                if board[i][j] != Some(player.symbol) || check_hor != true {
-                    check_hor = false;
-                }
-                if (i == j && board[i][j] != Some(player.symbol)) || check_diag != true {
-                    check_diag = false;
-                }
+                transpose[j][i] = board[i][j];
             }
         }
-        true
+
+        for i in 0..board.len() {
+            if board[i] == [Some(player.symbol); 3] || transpose[i] == [Some(player.symbol); 3] {is_win = true;}
+        }
+
+        if board[0][0] == Some(player.symbol) && board[1][1] == Some(player.symbol) && board[2][2] == Some(player.symbol) {is_win = true;}
+
+        is_win
     }
 }
